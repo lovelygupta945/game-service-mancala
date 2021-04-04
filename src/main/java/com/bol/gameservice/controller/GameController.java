@@ -26,14 +26,20 @@ import java.util.List;
 @RequestMapping("/game")
 public class GameController {
 
-    @Autowired
-    GameService gameService;
+
+    private final GameService gameService;
+
+    private final PlayerService playerService;
+
+    private final HttpSession httpSession;
 
     @Autowired
-    PlayerService playerService;
+    public GameController(GameService gameService, PlayerService playerService, HttpSession httpSession){
+        this.gameService = gameService;
 
-    @Autowired
-    HttpSession httpSession;
+        this.playerService = playerService;
+        this.httpSession = httpSession;
+    }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "Create new game")

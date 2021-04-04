@@ -7,9 +7,10 @@ import com.bol.gameservice.exception.PlayerNotFoundException;
 import com.bol.gameservice.service.GameService;
 import com.bol.gameservice.service.MoveService;
 import com.bol.gameservice.service.PlayerService;
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,16 +21,21 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
+@Log4j2
 public class DemoPlayGameController {
 
-    @Autowired
-    GameService gameService;
+    private final GameService gameService;
+    private final PlayerService playerService;
+    private final MoveService moveService;
 
     @Autowired
-    PlayerService playerService;
+    public DemoPlayGameController(GameService gameService, PlayerService playerService, MoveService moveService){
+        this.gameService = gameService;
+        this.playerService = playerService;
+        this.moveService = moveService;
+    }
 
-    @Autowired
-    MoveService moveService;
+
 
     @PutMapping(value = "/demoPlayGame", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> playGame(@RequestBody PlayGameRequest request) {
@@ -47,19 +53,19 @@ public class DemoPlayGameController {
         StringBuilder result = new StringBuilder();
 
         while (gameState.getGameStatus() == GameStatus.IN_PROGRESS) {
-            Arrays.stream(pitPositionInput).limit(10).forEach(value -> {
-                val newGameState = moveService.playNextMove(game, game.getCurrentPlayerId(), value);
+            Arrays.stream(pitPositionInput).limit(10).forEach(pitPosition -> {
+                val newGameState = moveService.playNextMove(game, game.getCurrentPlayerId(), pitPosition);
                 steps.getAndIncrement();
-                result.append("Selected pitPosition:").append(value).append("\n");
+                result.append("Selected pitPosition:").append(pitPosition).append("\n");
                 result.append(newGameState.getBoardData());
-                System.out.println(result);
+                log.info(result);
             });
             if(steps.get() >= 10) {
                 break;
             }
         }
 
-        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
+        return ResponseEntity.ok(result.toString());
     }
 
     private Game checkGamePriorConditionAndGetGame(long player1, long player2, long gameId) {

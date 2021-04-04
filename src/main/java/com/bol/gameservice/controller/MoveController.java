@@ -18,12 +18,19 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 public class MoveController {
+
+    private final HttpSession httpSession;
+
+    private final MoveService moveService;
+
+    private final GameService gameService;
+
     @Autowired
-    HttpSession httpSession;
-    @Autowired
-    private MoveService moveService;
-    @Autowired
-    private GameService gameService;
+    public MoveController(HttpSession httpSession, MoveService moveService, GameService gameService){
+        this.httpSession = httpSession;
+        this.moveService = moveService;
+        this.gameService = gameService;
+    }
 
     @PostMapping("/play/move")
     public ResponseEntity<GameState> playNextMove(@RequestBody Turn currentTurn) {

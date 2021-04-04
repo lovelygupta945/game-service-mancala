@@ -18,8 +18,13 @@ import java.util.List;
 @RequestMapping("/player")
 public class PlayerController {
 
+
+    private final PlayerService playerService;
+
     @Autowired
-    PlayerService playerService;
+    public PlayerController(PlayerService playerService){
+        this.playerService = playerService;
+    }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Player> createAccount(@RequestBody Player player, @PathVariable Long id) {
