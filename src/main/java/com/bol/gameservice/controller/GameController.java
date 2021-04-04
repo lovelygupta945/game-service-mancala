@@ -45,7 +45,7 @@ public class GameController {
 
         httpSession.setAttribute("gameId", game.getId());
         log.info(String.format("New game id: %s stored in session" , httpSession.getAttribute("gameId")));
-        return ResponseEntity.ok(game);
+        return ResponseEntity.status(HttpStatus.CREATED).body(game);
     }
 
     @GetMapping(value = "/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
