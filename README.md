@@ -50,7 +50,7 @@ docker-compose up -d game-db-postgres
 ```
 host=localhost
 port=5432
-database=warehouse
+database=game
 user=postgres
 password=password
 ```
