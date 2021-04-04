@@ -43,6 +43,23 @@ docker-compose up -d game-db-postgres
 
 * Can be accessed on: http://localhost:8080/actuator
 
+
+#### PostgreSQL Database connection
+
+* The database can be connected by using the following details:
+```
+host=localhost
+port=5432
+database=warehouse
+user=postgres
+password=password
+```
+
+### Stopping the application and cleaning-up
+```
+docker-compose down -v --rmi all --remove-orphans
+```
+
 Set-up
 ------------
 
@@ -68,6 +85,7 @@ Technology/Framework used:
 * Java 11, spring boot, Maven as build tool & Lombok library
 * server : used embedded tomcat server through spring boot
 * IDE : Intellij
+* Database: Postgres
 
 Design:
 ------------

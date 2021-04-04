@@ -3,7 +3,7 @@
 ##########################################################################################
 FROM maven:3.6.3-adoptopenjdk-11 as maven_build
 #
-LABEL maintainer="Lovely Gupta"
+LABEL maintainer="Salman Azad"
 
 # Copy source code
 COPY src /home/app/src
