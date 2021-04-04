@@ -1,0 +1,35 @@
+version: "3.7"
+networks:
+  game_network:
+services:
+  game-db-postgres:
+    container_name: game_db_postgres
+    image: postgres:13.1
+    restart: always
+    environment:
+      POSTGRES_DB: game
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
+    networks:
+      - game_network
+  game-service:
+    depends_on:
+      - game-db-postgres
+    container_name: game_service
+    image: game-service:0.0.1
+    build:
+      network: host
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - game_network
+    links:
+      - game-db-postgres
+    environment:
+      - spring.datasource.url=jdbc:postgresql://game-db-postgres:5432/game
+      - spring.datasource.username=postgres
+      - spring.datasource.password=password

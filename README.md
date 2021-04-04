@@ -23,7 +23,7 @@ docker-compose up --build
 #####  Approach 2
 * Execute the below docker-compose command to start the database instance:
 ```
-docker-compose up -d warehouse-db-postgres
+docker-compose up -d game-db-postgres
 ```
 ##### and
 * Execute the below mvn command to run the application:

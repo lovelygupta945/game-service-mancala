@@ -1,0 +1,30 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: game-service
+  datasource:
+    #    url: jdbc:postgresql://localhost:5432/game
+    #    username: postgres
+    #    password: password
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      connection-timeout: 2000
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include:
+          - info
+          - health
+          - metrics
