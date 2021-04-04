@@ -3,7 +3,7 @@ server:
 logging:
   level:
     web: debug
-    com.demo.warehouseservice: debug
+    com.demo.gameservice: debug
 spring:
   application:
     name: game-service
