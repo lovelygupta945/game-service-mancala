@@ -7,9 +7,10 @@ import com.bol.gameservice.exception.PlayerNotFoundException;
 import com.bol.gameservice.service.GameService;
 import com.bol.gameservice.service.MoveService;
 import com.bol.gameservice.service.PlayerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,15 @@ public class DemoPlayGameController {
     }
 
 
+    /**
+     *
+     * @param request playGame request
+     * @return Board representation
+     */
 
     @PutMapping(value = "/demoPlayGame", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponse(responseCode = "200", description = "Play demo game")
+    @Operation(summary = "Play Game")
     public ResponseEntity<String> playGame(@RequestBody PlayGameRequest request) {
         long player1 = request.getPlayer1();
         long player2 = request.getPlayer2();

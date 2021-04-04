@@ -36,7 +36,6 @@ public class GameController {
     @Autowired
     public GameController(GameService gameService, PlayerService playerService, HttpSession httpSession){
         this.gameService = gameService;
-
         this.playerService = playerService;
         this.httpSession = httpSession;
     }
@@ -63,7 +62,7 @@ public class GameController {
     }
 
     @Operation(summary = "Get list of available games")
-    @ApiResponse(responseCode = "200", description = "Returns list of availale games")
+    @ApiResponse(responseCode = "200", description = "Returns list of available games")
     @GetMapping(value = "/available", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Game>> getGamesToJoin(@RequestBody Long playerId) {
         val game = gameService

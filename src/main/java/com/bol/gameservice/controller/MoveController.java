@@ -6,6 +6,8 @@ import com.bol.gameservice.dto.Turn;
 import com.bol.gameservice.exception.GameNotFoundException;
 import com.bol.gameservice.service.GameService;
 import com.bol.gameservice.service.MoveService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,19 +35,23 @@ public class MoveController {
     }
 
     @PostMapping("/play/move")
+    @ApiResponse(responseCode = "200", description = "Returns game state")
+    @Operation(summary = "Play next move")
     public ResponseEntity<GameState> playNextMove(@RequestBody Turn currentTurn) {
         Long gameId = (Long) httpSession.getAttribute("gameId");
         Game game = gameService.getGame(gameId).orElseThrow(() -> new GameNotFoundException(gameId));
         GameState gameState = moveService.playNextMove(game, currentTurn.getPlayerID(), currentTurn.getPitPosition());
         httpSession.setAttribute("gameStatus", gameState);
         gameService.updateGame(game, gameState.getGameStatus());
-        return new ResponseEntity<>(gameState, HttpStatus.OK);
+        return ResponseEntity.ok(gameState);
     }
 
     @GetMapping("/move/checkTurn")
+    @ApiResponse(responseCode = "200", description = "Return player's turn is valid")
+    @Operation(summary = "Check turn")
     public ResponseEntity<Boolean> checkTurn(@RequestBody Turn currentTurn) {
         Long gameId = (Long) httpSession.getAttribute("gameId");
         Game game = gameService.getGame(gameId).orElseThrow(() -> new GameNotFoundException(0L));
-        return new ResponseEntity<>(moveService.isPlayerTurn(game, currentTurn.getPlayerID()), HttpStatus.OK);
+        return ResponseEntity.ok(moveService.isPlayerTurn(game, currentTurn.getPlayerID()));
     }
 }
