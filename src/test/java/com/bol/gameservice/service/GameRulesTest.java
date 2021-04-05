@@ -4,6 +4,8 @@ package com.bol.gameservice.service;
 import com.bol.gameservice.domain.Board;
 import com.bol.gameservice.domain.Game;
 import com.bol.gameservice.dto.PitPlace;
+import com.bol.gameservice.exception.PitPositionOutOfRangeException;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,14 +34,23 @@ public class GameRulesTest {
         int pitPosition = 0;
         rules.playTurn(pitPosition, PitPlace.LOWER, board);
         int[] pits = board.getPits();
-        int indexOfLowerLargePit = board.getLowerLargePitIndex();
-        int indexOfUpperLargePit = board.getUpperLargePitIndex();
-        assertThat(1).isEqualTo(pits[indexOfLowerLargePit]);
+        int lowerLargePitIndex = board.getLowerLargePitIndex();
+        int upperLargePitIndex = board.getUpperLargePitIndex();
+        assertThat(1).isEqualTo(pits[lowerLargePitIndex]);
         assertThat(0).isEqualTo(pits[0]);
         assertThat(7).isEqualTo(pits[1]);
-        assertThat(0).isEqualTo(pits[indexOfUpperLargePit]);
+        assertThat(0).isEqualTo(pits[upperLargePitIndex]);
     }
 
+    @Test
+    public void testPlayTurnInvalidPitPosition() {
+        int pitPosition = 6;
+        try {
+            rules.playTurn(pitPosition, PitPlace.LOWER, board);
+        } catch (PitPositionOutOfRangeException ex){
+            Assertions.assertThatExceptionOfType(PitPositionOutOfRangeException.class);
+        }
+    }
 
     @Test
     public void tesPlayTurnCapturingOpponentStones() {
