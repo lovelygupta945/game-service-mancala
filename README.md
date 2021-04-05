@@ -1,7 +1,27 @@
 Salman Azad Assignment Solution 
 =======
 
-A Java version of a board game!
+A Java Application for Mancala a board game!
+
+![mancala diagram](metadata/mancala.jpeg)
+
+The game has the following rules:
+---------------------------------
+
+* Players take turns to move stones from any of their small pits.
+* In a move a player places the stones in every pit after the selected pit, anti-clockwise (towards right) round the board.
+* In a move a player never places stones in their opponents big pit.
+* If the move ends in the player's own big pit - they get another go.
+* If the move ends in a player's own pit that was empty. They collect that last stone from that pit and all stones in the opponent's opposite pit.
+* Play finishes when either player has no more moves to make (no more stones in any of small pits of either of the player).
+* Winner of the game is the player who has the most stones in his big pit.
+
+Technology/Framework used:
+-------------------------
+* Java 11, spring boot, Maven as build tool & Lombok library
+* server : used embedded tomcat server through spring boot
+* IDE : Intellij
+* Database: Postgres
 
 ## Getting Started
 
@@ -69,23 +89,7 @@ The game has the following starting set up:
 * A board containing 2 sets of 6 pits for each player laid out in two lines of 6 facing each other, with one bigger "end pit" on the right of the player's 6 small pits
 * 6 stones in each of the player's small pits.
 
-The game has the following rules:
----------------------------------
 
-* Players take turns to move stones from any of their small pits.
-* In a move a player places the stones in every pit after the selected pit, anti-clockwise (towards right) round the board.
-* In a move a player never places stones in their opponents big pit.
-* If the move ends in the player's own big pit - they get another go.
-* If the move ends in a player's own pit that was empty. They collect that last stone from that pit and all stones in the opponent's opposite pit.
-* Play finishes when either player has no more moves to make (no more stones in any of small pits of either of the player).
-* Winner of the game is the player who has the most stones in his big pit.
-
-Technology/Framework used:
--------------------------
-* Java 11, spring boot, Maven as build tool & Lombok library
-* server : used embedded tomcat server through spring boot
-* IDE : Intellij
-* Database: Postgres
 
 Design:
 ------------

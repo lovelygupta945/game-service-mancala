@@ -30,7 +30,7 @@ public class GameRulesTest {
     @Test
     public void testPlayTurnValidPlay() {
         int pitPosition = 0;
-        rules.playTurn(pitPosition, PitPlace.Lower, board);
+        rules.playTurn(pitPosition, PitPlace.LOWER, board);
         int[] pits = board.getPits();
         int indexOfLowerLargePit = board.getLowerLargePitIndex();
         int indexOfUpperLargePit = board.getUpperLargePitIndex();
@@ -40,26 +40,23 @@ public class GameRulesTest {
         assertThat(0).isEqualTo(pits[indexOfUpperLargePit]);
     }
 
-//    @Test( = PitPositionOutOfRangeException.class)
-//    public void testPlayTurnInvalidPitPosition() {
-//        int pitPosition = 6;
-//        rules.playTurn(pitPosition, PitPlace.Lower, board);
-//    }
 
     @Test
     public void tesPlayTurnCapturingOpponentStones() {
         int pitPosition = 5;
-        int pitToCaptureTo = 5;
-        int pitToCaptureFrom = 7;
+        int pitToBePickedFrom = 5;
+        int pitToCaptureFrom = 8;
+        int lowerLargerPit = 6;
         int[] pits = new int[14];
-        pits[pitToCaptureTo] = 13;
+        pits[pitToBePickedFrom] = 12;
         pits[pitToCaptureFrom] = 6;
-        int stonesAfterCapture = pits[pitToCaptureFrom] + 2;
+        pits[lowerLargerPit] = 9;
+        int stonesAfterCapture = pits[pitToCaptureFrom] + pits[lowerLargerPit] + 2;
         board.setPits(pits);
-        rules.playTurn(pitPosition, PitPlace.Lower, board);
+        rules.playTurn(pitPosition, PitPlace.LOWER, board);
         int[] pitsAfterPlay = board.getPits();
 
-        assertThat(stonesAfterCapture).isEqualTo(pitsAfterPlay[pitToCaptureTo]);
+        assertThat(stonesAfterCapture).isEqualTo(pitsAfterPlay[lowerLargerPit]);
         assertThat(0).isEqualTo(pitsAfterPlay[pitToCaptureFrom]);
 
     }
@@ -74,6 +71,6 @@ public class GameRulesTest {
         pits[indexOfUpperLargePit] = 6;
         board.setPits(pits);
         PitPlace pitPlaceWinner = rules.getWinner(board);
-        assertThat(PitPlace.Lower).isEqualTo(pitPlaceWinner);
+        assertThat(PitPlace.LOWER).isEqualTo(pitPlaceWinner);
     }
 }

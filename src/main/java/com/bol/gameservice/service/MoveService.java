@@ -61,8 +61,8 @@ public class MoveService {
         }
 
         roundStatus = game.getCurrentPlayerId() > game.getOtherPlayerID()
-                        ? gameRules.playTurn(pitPosition, PitPlace.Upper, board)
-                        : gameRules.playTurn(pitPosition, PitPlace.Lower, board);
+                        ? gameRules.playTurn(pitPosition, PitPlace.UPPER, board)
+                        : gameRules.playTurn(pitPosition, PitPlace.LOWER, board);
 
         boardRepository.save(board);
         return calculateGameState(board, game, roundStatus);
@@ -86,7 +86,7 @@ public class MoveService {
         } else {
             // update game status
             PitPlace pitPlace = gameRules.getWinner(board);
-            return pitPlace == PitPlace.Upper ? new GameState(board.toString(), RoundStatus.FINISHED, GameStatus.SECOND_PLAYER_WON) :
+            return pitPlace == PitPlace.UPPER ? new GameState(board.toString(), RoundStatus.FINISHED, GameStatus.SECOND_PLAYER_WON) :
                     new GameState(board.toString(), RoundStatus.FINISHED, GameStatus.FIRST_PLAYER_WON);
         }
     }
@@ -109,7 +109,7 @@ public class MoveService {
     public Long getWinner(Game game) {
         Board board = boardRepository.findByGame(game).orElseThrow(() -> new GameNotFoundException(game.getId()));
 
-        return gameRules.getWinner(board) == PitPlace.Upper
+        return gameRules.getWinner(board) == PitPlace.UPPER
                 ? game.getCurrentPlayerId() > game.getOtherPlayerID() ? game.getCurrentPlayerId() : game.getOtherPlayerID()
                 : game.getCurrentPlayerId() < game.getOtherPlayerID() ? game.getCurrentPlayerId() : game.getOtherPlayerID();
     }

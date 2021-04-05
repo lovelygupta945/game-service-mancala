@@ -28,21 +28,21 @@ public class GameRules {
 
         int lowerLargePitIndex = board.getLowerLargePitIndex();
         int upperLargePitIndex = board.getUpperLargePitIndex();
-        if (pitPlace == PitPlace.Upper)
+        if (pitPlace == PitPlace.UPPER)
             pitPosition = pitPosition + lowerLargePitIndex + 1;
 
         pits[pitPosition] = 0;
         int index = sowStones(pitPosition, pitPlace, lowerLargePitIndex, upperLargePitIndex, stonesInPit, pits);
 
         // capturing stones
-        int [] updatedPits = pits[index] == 1 ? capturingStone(index - 1, pits, upperLargePitIndex, lowerLargePitIndex, pitPlace) : pits;
+        int[] updatedPits = pits[index-1] == 1 ? capturingStone(index - 1, pits, upperLargePitIndex, lowerLargePitIndex, pitPlace) : pits;
         board.setPits(updatedPits);
 
         // check turn
-        if (pitPlace == PitPlace.Upper && (index - 1) == upperLargePitIndex)
+        if (pitPlace == PitPlace.UPPER && (index - 1) == upperLargePitIndex)
             return RoundStatus.PLAY_TURN;
 
-        if (pitPlace == PitPlace.Lower && (index - 1) == lowerLargePitIndex)
+        if (pitPlace == PitPlace.LOWER && (index - 1) == lowerLargePitIndex)
             return RoundStatus.PLAY_TURN;
 
         return RoundStatus.WAIT_FOR_TURN;
@@ -50,16 +50,17 @@ public class GameRules {
 
     /**
      * This method checked the conditions that needs to fulfilled before playing the turn.
+     *
      * @param stonesInPit No. of stones in the selected Pits.
      * @param pitPosition Selected position in the pits.
-     * @param board Board representing the game including pits.
+     * @param board       Board representing the game including pits.
      */
     private void checkTurnPriorConditions(int stonesInPit, int pitPosition, Board board) {
 
         if (pitPosition < 0 || pitPosition > (board.getPitRange())) {
             throw new PitPositionOutOfRangeException(String.format("Pit Position: %s is out of range. Use range [ 0-5 ] ", pitPosition));
         }
-        if(stonesInPit == 0) {
+        if (stonesInPit == 0) {
             throw new PitHasNoStonesException(String.format("Pit %s has no stones. Please pick stones from another pit.", pitPosition));
         }
     }
@@ -67,21 +68,21 @@ public class GameRules {
     /**
      * Sow stones in the pits as per the rule not in opponent's large pit.
      *
-     * @param pitPosition Position in the Pit to pick stones.
-     * @param pitPlace Place in the pit UPPER or LOWER.
+     * @param pitPosition        Position in the Pit to pick stones.
+     * @param pitPlace           Place in the pit UPPER or LOWER.
      * @param lowerLargePitIndex Index of Upper Large Pit (Player 2's large pit).
      * @param upperLargePitIndex Index of Lower Large Pit (Player 1's Large pit)
-     * @param stonesInPit No. of stones in the selected pit.
-     * @param pits array to represent pits in the board.
+     * @param stonesInPit        No. of stones in the selected pit.
+     * @param pits               array to represent pits in the board.
      * @return New index of the after sowing all the stones.
      */
-    private int sowStones(int pitPosition, PitPlace pitPlace, int lowerLargePitIndex, int upperLargePitIndex, int stonesInPit, int [] pits) {
+    private int sowStones(int pitPosition, PitPlace pitPlace, int lowerLargePitIndex, int upperLargePitIndex, int stonesInPit, int[] pits) {
         int index = pitPosition + 1;
         while (stonesInPit > 0) {
             if (index > upperLargePitIndex) {
                 index = 0;
             }
-            if (!((index == upperLargePitIndex && pitPlace == PitPlace.Lower) || (index == lowerLargePitIndex && pitPlace == PitPlace.Upper))) {
+            if (!((index == upperLargePitIndex && pitPlace == PitPlace.LOWER) || (index == lowerLargePitIndex && pitPlace == PitPlace.UPPER))) {
                 pits[index]++;
                 stonesInPit--;
             }
@@ -92,6 +93,7 @@ public class GameRules {
 
     /**
      * This method checks if the game is over.
+     *
      * @param board Board representing the game.
      * @return Returns true or false.
      */
@@ -108,31 +110,33 @@ public class GameRules {
 
     /**
      * This method returns the winner of the game.
+     *
      * @param board Board representing the game.
      * @return Returns PitPlace which determines the winner Upper -> Player 2, Lower -> Player 1
      */
     protected PitPlace getWinner(Board board) {
         int[] pits = board.getPits();
-        return pits[board.getLowerLargePitIndex()] > pits[board.getUpperLargePitIndex()] ? PitPlace.Lower : PitPlace.Upper;
+        return pits[board.getLowerLargePitIndex()] > pits[board.getUpperLargePitIndex()] ? PitPlace.LOWER : PitPlace.UPPER;
     }
 
     /**
-     *
-     * @param index current index of pit array.
-     * @param pits pits representing the board
+     * @param index              current index of pit array.
+     * @param pits               pits representing the board
      * @param upperLargePitIndex Index Of Upper Large Pit
      * @param lowerLargePitIndex Index of Lower Large Pit
      * @return new pit array after collecting the stones as per game rule.
      */
     private int[] capturingStone(int index, int[] pits, int upperLargePitIndex, int lowerLargePitIndex, PitPlace pitPlace) {
-            int oppositeIndex = upperLargePitIndex - index - 1;
-            if (!(index == lowerLargePitIndex || index == upperLargePitIndex)) {
-                log.info("capturing stones..............");
-                int pitIndexToFill;
-                pitIndexToFill = pitPlace == PitPlace.Lower ? lowerLargePitIndex : upperLargePitIndex;
-                pits[pitIndexToFill] = pits[index] + pits[oppositeIndex];
-                pits[oppositeIndex] = 0;
+        int oppositeIndex = upperLargePitIndex - index - 1;
+        if (!(index == lowerLargePitIndex || index == upperLargePitIndex)) {
+            log.info("capturing stones..............");
+            if (pitPlace == PitPlace.LOWER) {
+                pits[lowerLargePitIndex] = pits[lowerLargePitIndex] + pits[oppositeIndex];
+            } else {
+                pits[upperLargePitIndex] = pits[upperLargePitIndex] + pits[oppositeIndex];
             }
+            pits[oppositeIndex] = 0;
+        }
         return pits;
     }
 }
