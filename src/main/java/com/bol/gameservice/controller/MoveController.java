@@ -9,11 +9,11 @@ import com.bol.gameservice.service.MoveService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
@@ -34,6 +34,11 @@ public class MoveController {
         this.gameService = gameService;
     }
 
+    /**
+     *
+     * @param currentTurn currentTurn
+     * @return Returns game state
+     */
     @PostMapping("/play/move")
     @ApiResponse(responseCode = "200", description = "Returns game state")
     @Operation(summary = "Play next move")
@@ -46,12 +51,17 @@ public class MoveController {
         return ResponseEntity.ok(gameState);
     }
 
+    /**
+     *
+     * @param playerId playerId
+     * @return Returns true if current player turn is valid
+     */
     @GetMapping("/move/checkTurn")
     @ApiResponse(responseCode = "200", description = "Return player's turn is valid")
     @Operation(summary = "Check turn")
-    public ResponseEntity<Boolean> checkTurn(@RequestBody Turn currentTurn) {
+    public ResponseEntity<Boolean> checkTurn(@RequestParam("playerId") Long playerId) {
         Long gameId = (Long) httpSession.getAttribute("gameId");
         Game game = gameService.getGame(gameId).orElseThrow(() -> new GameNotFoundException(0L));
-        return ResponseEntity.ok(moveService.isPlayerTurn(game, currentTurn.getPlayerID()));
+        return ResponseEntity.ok(moveService.isPlayerTurn(game, playerId));
     }
 }

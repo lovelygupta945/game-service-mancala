@@ -1,6 +1,7 @@
 package com.bol.gameservice.dto;
 
 import lombok.Data;
+import lombok.NonNull;
 
 /**
  * Class to accept request for DemoPlayerController.
@@ -8,8 +9,8 @@ import lombok.Data;
 
 @Data
 public class PlayGameRequest {
-    Long player1;
-    Long player2;
-    Long gameId;
+    @NonNull Long player1;
+    @NonNull Long player2;
+    @NonNull Long gameId;
     Turn turn;
 }

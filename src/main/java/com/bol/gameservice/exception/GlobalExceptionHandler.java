@@ -51,12 +51,12 @@ public class GlobalExceptionHandler {
      * @param exception the exception
      * @return the response entity
      */
-    @ExceptionHandler(value = {GameAlreadyStartedException.class})
+    @ExceptionHandler(value = {GameAlreadyStartedException.class, PlayerAlreadyAddedToGameException.class})
     public ResponseEntity<ErrorDetails> handleConflictException(Exception exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorDetails.builder()
                         .timestamp(LocalDateTime.now())
-                        .message("Game Already started")
+                        .message("Game validation failed")
                         .details(exception.getMessage())
                         .build());
     }

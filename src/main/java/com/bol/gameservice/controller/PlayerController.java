@@ -27,18 +27,27 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
-    @PutMapping(value = "/{id}")
+    /**
+     *
+     * @param player player details
+     * @return Returns created player
+     */
+    @PutMapping(value = "/")
     @ApiResponse(responseCode = "200", description = "Returns player account")
     @Operation(summary = "Create player account")
-    public ResponseEntity<Player> createAccount(@RequestBody Player player, @PathVariable Long id) {
+    public ResponseEntity<Player> createAccount(@RequestBody Player player) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(playerService.getPlayer(id).map(foundPlayer -> {
+                .body(playerService.getPlayer(player.getId()).map(foundPlayer -> {
             foundPlayer.setPlayerName(player.getPlayerName());
             foundPlayer.setPassword(player.getPassword());
             return foundPlayer;
         }).orElseGet(() -> playerService.createNewPlayer(player)));
     }
 
+    /**
+     *
+     * @return List of players
+     */
     @GetMapping
     @ApiResponse(responseCode = "200", description = "Return list of players")
     @Operation(summary = "Get players")

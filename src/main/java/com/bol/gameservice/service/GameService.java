@@ -6,6 +6,7 @@
  import com.bol.gameservice.dto.GameStatus;
  import com.bol.gameservice.exception.GameAlreadyStartedException;
  import com.bol.gameservice.exception.GameNotFoundException;
+ import com.bol.gameservice.exception.PlayerAlreadyAddedToGameException;
  import com.bol.gameservice.repository.GameRepository;
  import lombok.RequiredArgsConstructor;
  import lombok.extern.log4j.Log4j2;
@@ -79,6 +80,9 @@
          return getGame(gameId).map(foundGame -> {
              if(foundGame.getGameStatus() == GameStatus.IN_PROGRESS) {
                 throw new GameAlreadyStartedException(gameId);
+             }
+             if(foundGame.getOtherPlayerID() == player.getId()){
+                 throw new PlayerAlreadyAddedToGameException(player.getId(), gameId);
              }
              foundGame.setSecondPlayer(player);
              gameRepository.save(foundGame);

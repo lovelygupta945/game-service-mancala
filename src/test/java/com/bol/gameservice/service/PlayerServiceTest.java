@@ -1,6 +1,7 @@
 package com.bol.gameservice.service;
 
 import com.bol.gameservice.domain.Player;
+import com.bol.gameservice.exception.PlayerAlreadyExistException;
 import com.bol.gameservice.repository.PlayerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -54,7 +56,12 @@ public class PlayerServiceTest {
     @Test
     public void testCreateNewPlayerThrowsException() {
         Mockito.when(playerRepository.findAll()).thenReturn(List.of(player1, player2));
-      //  assertThat(playerService.createNewPlayer(player1));
+        try{
+            assertThat(playerService.createNewPlayer(player1));
+        } catch (PlayerAlreadyExistException ex){
+            assertThatExceptionOfType(PlayerAlreadyExistException.class);
+        }
+
     }
 
     @Test

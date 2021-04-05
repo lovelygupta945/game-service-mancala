@@ -40,10 +40,15 @@ public class GameController {
         this.httpSession = httpSession;
     }
 
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    /**
+     *
+     * @param playerId Player id
+     * @return returns new game created for the player
+     */
+    @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "Create new game")
     @ApiResponse(responseCode = "200", description = "Returns created game")
-    public ResponseEntity<Game> createNewGame(@RequestBody Long playerId) {
+    public ResponseEntity<Game> createNewGame(@RequestParam("playerId") @NonNull Long playerId) {
         Game game = gameService
                 .createNewGame(playerService.getPlayer(playerId).orElseThrow(
                         () -> new PlayerNotFoundException(playerId)));
@@ -53,6 +58,11 @@ public class GameController {
         return ResponseEntity.status(HttpStatus.CREATED).body(game);
     }
 
+    /**
+     *
+     * @param gameId game Id
+     * @return Returns game details
+     */
     @GetMapping(value = "/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get game details")
     @ApiResponse(responseCode = "200", description = "Returns game")
@@ -61,29 +71,45 @@ public class GameController {
         return ResponseEntity.ok(game);
     }
 
+    /**
+     *
+     * @param playerId playerId
+     * @return Available games for input player to join
+     */
     @Operation(summary = "Get list of available games")
     @ApiResponse(responseCode = "200", description = "Returns list of available games")
     @GetMapping(value = "/available", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Game>> getGamesToJoin(@RequestParam("playerId") Long playerId) {
+    public ResponseEntity<List<Game>> getGamesToJoin(@RequestParam("playerId") @NonNull Long playerId) {
         val game = gameService
                 .getGamesToJoin(playerService.getPlayer(playerId)
                         .orElseThrow(() -> new PlayerNotFoundException(playerId)));
         return ResponseEntity.ok(game);
     }
 
+    /**
+     *
+     * @param playerId playerId
+     * @param gameId gameId
+     * @return Returns game that player joined
+     */
     @PostMapping(value = "/join/{gameId}")
     @Operation(summary = "Join a game")
     @ApiResponse(responseCode = "200", description = "Returns joined game")
-    public ResponseEntity<Game> joinGame(@RequestBody Long playerId, @PathVariable Long gameId) {
+    public ResponseEntity<Game> joinGame(@RequestParam("playerId") @NonNull Long playerId, @PathVariable Long gameId) {
         val game = gameService.joinGame(playerService.getPlayer(playerId).orElseThrow(() -> new PlayerNotFoundException(playerId))
                 , gameId).orElseThrow(() -> new GameNotFoundException(gameId));
         return ResponseEntity.ok(game);
     }
 
+    /**
+     *
+     * @param gameId gameId
+     * @return Returns game status
+     */
     @GetMapping(value = "/status/{gameId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get game status")
     @ApiResponse(responseCode = "200", description = "Returns game status")
-    public ResponseEntity<GameStatus> getGameStatus(@PathVariable @NonNull Long gameId) {
+    public ResponseEntity<GameStatus> getGameStatus(@PathVariable Long gameId) {
          val game = gameService.getGameStatusByGameId(gameId);
         return ResponseEntity.ok(game.getGameStatus());
     }

@@ -49,7 +49,7 @@ public class MoveService {
         // As per the task the board will contain 6 pits and 6 stones in each pit.
         Board board = boardRepository.findByGame(game).orElseGet(() -> new Board(0, 6, 6, game));
         if (game.getCurrentPlayerId() != playerId) {
-            String errorMsg = String.format("Not your turn. WAIT for other player id: %s to play.  ", playerId);
+            String errorMsg = String.format("Not your turn. WAIT for other player id: %s to play.  ", game.getCurrentPlayerId());
             log.error(errorMsg);
             throw new IncorrectTurnPlayerException(errorMsg);
         }

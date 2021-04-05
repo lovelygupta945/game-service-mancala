@@ -93,7 +93,6 @@ public class GameRules {
 
     /**
      * This method checks if the game is over.
-     *
      * @param board Board representing the game.
      * @return Returns true or false.
      */
@@ -110,7 +109,6 @@ public class GameRules {
 
     /**
      * This method returns the winner of the game.
-     *
      * @param board Board representing the game.
      * @return Returns PitPlace which determines the winner Upper -> Player 2, Lower -> Player 1
      */
@@ -120,8 +118,9 @@ public class GameRules {
     }
 
     /**
-     * @param index              current index of pit array.
-     * @param pits               pits representing the board
+     *
+     * @param index current index of pit array.
+     * @param pits pits representing the board
      * @param upperLargePitIndex Index Of Upper Large Pit
      * @param lowerLargePitIndex Index of Lower Large Pit
      * @return new pit array after collecting the stones as per game rule.
