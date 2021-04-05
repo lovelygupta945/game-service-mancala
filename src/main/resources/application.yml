@@ -4,9 +4,9 @@ spring:
   application:
     name: game-service
   datasource:
-    #    url: jdbc:postgresql://localhost:5432/game
-    #    username: postgres
-    #    password: password
+    url: jdbc:postgresql://localhost:5432/game
+    username: postgres
+    password: password
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
     hikari:
