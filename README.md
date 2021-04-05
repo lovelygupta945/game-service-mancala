@@ -41,38 +41,13 @@ Things you need to get the project up and running on a local machine:
 docker-compose up --build
 ```
 #####  Approach 2
-* Execute the below docker-compose command to start the database instance:
+a) Execute the below docker-compose command to start the database instance:
 ```
 docker-compose up -d game-db-postgres
 ```
-##### and
-* Execute the below mvn command to run the application:
+b) Execute the below mvn command to run the application:
 ```
 ./mvnw spring-boot:run
-```
-
-#### Swagger Endpoint
-
-* Open 'http://localhost:8080/swagger-ui.html' in the web browser to open swagger to check REST apis.
-
-#### REST services
-
-* REST services can be accessed on: http://localhost:8080
-
-#### Actuators 
-
-* Can be accessed on: http://localhost:8080/actuator
-
-
-#### PostgreSQL Database connection
-
-* The database can be connected by using the following details:
-```
-host=localhost
-port=5432
-database=game
-user=postgres
-password=password
 ```
 
 ### Stopping the application and cleaning-up
@@ -107,7 +82,7 @@ Design:
 API Design
 -----------------
 
-##### The api supports the following:
+##### The api supports the following endpoints:
 **Registration of Players**
 
 | HTTP VERB| ENDPOINT |URL Params| DATA   | RESPONSE |
@@ -131,6 +106,39 @@ API Design
 | ------ | ------ | ------ | ------ | ------ |
 | POST | play/move |none| {"playerID":  "1","pitPosition":  "3"}| 200 OK {"boardString":  String representing the board,"nextTurn":  Continue or wait for turn, "gameStatus": enum}|
 | GET | move/checkTurn | none |{"playerID":  "1","pitPosition":  "3"}| 200 OK true or false|
+
+#### REST services
+
+* REST services can be accessed on: http://localhost:8080
+
+#### Swagger Endpoint : API Specification can be found at below url:
+
+* Open 'http://localhost:8080/swagger-ui.html' in the web browser to open swagger to check REST apis.
+
+![API Documentation](metadata/APIDocumentation.png)
+
+#### Monitoring through Actuator :
+
+* Can be accessed on: http://localhost:8080/actuator
+
+![API Documentation](metadata/actuator.png)
+
+#### PostgreSQL Database connection
+
+* The database can be connected by using the following details:
+```
+host=localhost
+port=5432
+database=game
+user=postgres
+password=password
+```
+
+#### Tables
+* Board
+* Player
+* Game
+
 
 **JSON Representing the Domain Objects:**
 
