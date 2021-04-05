@@ -35,7 +35,7 @@ public class GameRules {
         int index = sowStones(pitPosition, pitPlace, lowerLargePitIndex, upperLargePitIndex, stonesInPit, pits);
 
         // capturing stones
-        int [] updatedPits = pits[index] == 1 ? capturingStone(index - 1, pits, upperLargePitIndex, lowerLargePitIndex) : pits;
+        int [] updatedPits = pits[index] == 1 ? capturingStone(index - 1, pits, upperLargePitIndex, lowerLargePitIndex, pitPlace) : pits;
         board.setPits(updatedPits);
 
         // check turn
@@ -124,11 +124,13 @@ public class GameRules {
      * @param lowerLargePitIndex Index of Lower Large Pit
      * @return new pit array after collecting the stones as per game rule.
      */
-    private int[] capturingStone(int index, int[] pits, int upperLargePitIndex, int lowerLargePitIndex) {
+    private int[] capturingStone(int index, int[] pits, int upperLargePitIndex, int lowerLargePitIndex, PitPlace pitPlace) {
             int oppositeIndex = upperLargePitIndex - index - 1;
             if (!(index == lowerLargePitIndex || index == upperLargePitIndex)) {
                 log.info("capturing stones..............");
-                pits[index] = pits[index] + pits[oppositeIndex];
+                int pitIndexToFill;
+                pitIndexToFill = pitPlace == PitPlace.Lower ? lowerLargePitIndex : upperLargePitIndex;
+                pits[pitIndexToFill] = pits[index] + pits[oppositeIndex];
                 pits[oppositeIndex] = 0;
             }
         return pits;

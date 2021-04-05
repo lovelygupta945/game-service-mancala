@@ -64,7 +64,7 @@ public class GameController {
     @Operation(summary = "Get list of available games")
     @ApiResponse(responseCode = "200", description = "Returns list of available games")
     @GetMapping(value = "/available", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Game>> getGamesToJoin(@RequestBody Long playerId) {
+    public ResponseEntity<List<Game>> getGamesToJoin(@RequestParam("playerId") Long playerId) {
         val game = gameService
                 .getGamesToJoin(playerService.getPlayer(playerId)
                         .orElseThrow(() -> new PlayerNotFoundException(playerId)));
